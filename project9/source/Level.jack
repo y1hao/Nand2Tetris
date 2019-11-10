@@ -1,0 +1,79 @@
+
+/**class Level: represent a level(floor) of the overall game map*/
+
+class Level {
+	field Array map;  // 64 char array storing the map
+	field int loc;  // starting location for a level
+	field int endLoc;  // first location when entering the level from an upper level
+	field int num;  // the number of the level, 1~7
+	
+	constructor Level new(String a, int n, int l, int e) {
+		var int i;
+		let i = 0;
+		let map = Array.new(64);
+		while(i < 64) {
+			let map[i] = a.charAt(i);
+			let i = i + 1;
+		}
+		let num = n;
+		let loc = l;
+		let endLoc = e;
+		return this;
+	}
+	
+	/**accessors*/
+	method Array getMap() {
+		return map;
+	}
+	method int getLoc() {
+		return loc;
+	}
+	method int getEndLoc() {
+		return endLoc;
+	}
+	method int getNum() {
+		return num;
+	}
+	
+	/**removes a monster or prop on the level*/
+	method void remove(int loc) {
+		let map[loc] = 49;  // '1' = 49
+		return;
+	}
+	
+	/**renders the level map*/
+	method void draw() {
+		var int i;
+		let i = 0;
+		do Draw.clear(16, 16, 16);  // clear level
+		while (i < 64) {
+			do Draw.drawBlock(i, map[i]); 
+			let i = i + 1;
+		}
+		do show();
+		return;
+	}
+	
+	/**show the information of the level i.e. "FLOOR X"*/
+	method void show() {
+		var String LEVELs;
+		var String SATRs;
+		let LEVELs = "******** FLOOR ";
+		let SATRs = " *********";
+		do Draw.clear(0, 1, 16);  // clear display area
+		do Output.moveCursor(0, 1);
+		do Output.printString(LEVELs);
+		do Output.printInt(num);
+		do Output.printString(SATRs);
+		do String.dispose(LEVELs);
+		do String.dispose(SATRs);
+		return;
+	}
+	
+	/**dispose of the level*/
+	method void dispose() {
+		do Array.dispose(map);
+		do Memory.deAlloc(this);
+		return;
+	}
+}

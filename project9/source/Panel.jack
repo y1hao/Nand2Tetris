@@ -1,0 +1,329 @@
+
+/**does all the functions in relation to the message area*/
+
+class Panel {
+	field int placeholder;  // in jack, a class must have at least one field to keep the VM from throwing exceptions
+	
+	/**clear the message area*/
+	function void clear() {
+		do Draw.clear(256, 8, 16);
+		return;
+	}
+	
+	/**shows information of a prop*/
+	function void propMess(char num) {
+		var String name;  // for the limitation of the jack language, should not use string literals directly other than in assignment
+		var String func;  // if a string is used anonymously, there is no way to dispose of it, this will cause memory leak
+		var String ELIXIR;
+		var String ELIXIRf;
+		var String SWORD;
+		var String SWORDf;
+		var String SHIELD;
+		var String SHIELDf;
+		var String KEY;
+		var String KEYf;
+		var String COIN;
+		var String COINf;
+		let ELIXIR = "MEDICINE";
+		let ELIXIRf = "   HP + 50!";
+		let SWORD = "SWORD";
+		let SWORDf = "Attack + 1!";
+		let SHIELD = "SHIELD";
+		let SHIELDf = "Defence + 1!";
+		let KEY = "kEY";
+		let KEYf = "Keys + 1!";
+		let COIN = "COIN BOX";
+		let COINf = "Money + 300!";
+		let name = ELIXIR;
+		let func = ELIXIRf;
+		if (num = 65) {
+			let name = ELIXIR;
+			let func = ELIXIRf;
+		}
+		if (num = 66) {
+			let name = SWORD;
+			let func = SWORDf;
+		}
+		if (num = 67) {
+			let name = SHIELD;
+			let func = SHIELDf;
+		}
+		if (num = 68) {
+			let name = KEY;
+			let func = KEYf;
+		}
+		if (num = 69) {
+			let name = COIN;
+			let func = COINf;
+		}
+		do Panel.clear();
+		do Output.moveCursor(15, 8);
+		do Output.printString(name);
+		do Output.moveCursor(17, 5);
+		do Output.printString(func);
+		do String.dispose(name);
+		do String.dispose(func);
+		do String.dispose(ELIXIR);
+		do String.dispose(ELIXIRf);
+		do String.dispose(SWORD);
+		do String.dispose(SWORDf);
+		do String.dispose(SHIELD);
+		do String.dispose(SHIELDf);
+		do String.dispose(KEY);
+		do String.dispose(KEYf);
+		do String.dispose(COIN);
+		do String.dispose(COINf);
+		return;
+	}
+	
+	/**shows the information about a monster*/
+	function void monsMess(char monster, int hp, int a, int d) {
+		var String name;
+		var int loss;
+		var String whiteslime;
+		var String blackslime;
+		var String smallbat;
+		var String largebat;
+		var String skeleton;
+		var String whitemage;
+		var String blackmage;
+		var String whiteguard;
+		var String blackguard;
+		var String devil;
+		var String HP;
+		var String ATK;
+		var String DEF;
+		var String GAIN;
+		var String LOSS;
+		var String FIGHT;
+		var String CHOICE;
+		
+		let HP = "HP: ";
+		let ATK = "Attack: ";
+		let DEF = "Defence: ";
+		let GAIN = "Gain: +$";
+		let LOSS = "Loss: HP -";
+		let FIGHT = "********* FIGHT? *********";
+		let CHOICE = "'1' = YES, '2' = NO";
+		let whiteslime = "****** WHITE SLIME *******";
+		let blackslime = "****** BLACK SLIME *******";
+		let smallbat =   "******* SMALL BAT ********";
+		let largebat =   "******* LARGE BAT ********";
+		let skeleton =   "******** SKELETON ********";
+		let whitemage =  "******* WHITE MAGE *******";
+		let blackmage =  "******* BLACK MAGE *******";
+		let whiteguard = "****** WHITE GUARD *******";
+		let blackguard = "****** BLACK GUARD *******";
+		let devil =      "********* DEVIL **********";
+		
+		if(~(a > Settings.getMonsDEF(monster))) {
+			let loss = 9999;
+		}
+		else {
+			if (~(d < Settings.getMonsATK(monster))) {
+				let loss = 0;
+			}
+			else {
+				let loss = Settings.getMonsHP(monster) / (a - Settings.getMonsDEF(monster)) * (Settings.getMonsATK(monster) - d);
+			}
+		}
+		if (monster = 97) {
+			let name = whiteslime;
+		}
+		if (monster = 98) {
+			let name = blackslime;
+		}
+		if (monster = 99) {
+			let name = smallbat;
+		}
+		if (monster = 100) {
+			let name = largebat;
+		}
+		if (monster = 101) {
+			let name = skeleton;
+		}
+		if (monster = 102) {
+			let name = whitemage;
+		}
+		if (monster = 103) {
+			let name = blackmage;
+		}
+		if (monster = 104) {
+			let name = whiteguard;
+		}
+		if (monster = 105) {
+			let name = blackguard;
+		}
+		if (monster = 106) {
+			let name = devil;
+		}
+		do Panel.clear();
+		do Output.moveCursor(12, 1);
+		do Output.printString(name);
+		do Output.moveCursor(14, 8);
+		do Output.printString(HP);
+		do Output.printInt(Settings.getMonsHP(monster));
+		do Output.moveCursor(15, 8);
+		do Output.printString(ATK);
+		do Output.printInt(Settings.getMonsATK(monster));
+		do Output.moveCursor(16, 8);
+		do Output.printString(DEF);
+		do Output.printInt(Settings.getMonsDEF(monster));
+		do Output.moveCursor(17, 8);
+		do Output.printString(LOSS);
+		do Output.printInt(loss);
+		do Output.moveCursor(18, 8);
+		do Output.printString(GAIN);
+		do Output.printInt(Settings.getMonsMoney(monster));
+		do Output.moveCursor(20, 1);
+		do Output.printString(FIGHT);
+		do Output.moveCursor(22, 3);
+		do Output.printString(CHOICE);
+		do String.dispose(whiteslime);
+		do String.dispose(blackslime);
+		do String.dispose(smallbat);
+		do String.dispose(largebat);
+		do String.dispose(skeleton);
+		do String.dispose(whitemage);
+		do String.dispose(blackmage);
+		do String.dispose(whiteguard);
+		do String.dispose(blackguard);
+		do String.dispose(devil);
+		do String.dispose(HP);
+		do String.dispose(ATK);
+		do String.dispose(DEF);
+		do String.dispose(GAIN);
+		do String.dispose(LOSS);
+		do String.dispose(FIGHT);
+		do String.dispose(CHOICE);
+		return;
+	}
+	
+	/**shows victory information, called by Hero.showWin(), takes the gain and loss information from the hero*/
+	function void vicMess(int gain, int loss) {
+		var String WINs;
+		var String HPs;
+		var String GOTs;
+		let WINs = "YOU WON!";
+		let HPs = "HP -";
+		let GOTs = "Got money: $";
+		do Panel.clear();
+		do Output.moveCursor(15, 5);
+		do Output.printString(WINs);
+		do Output.moveCursor(17, 5);
+		do Output.printString(HPs);
+		do Output.printInt(loss);
+		do Output.moveCursor(19, 5);
+		do Output.printString(GOTs);
+		do Output.printInt(gain);
+		do String.dispose(WINs);
+		do String.dispose(HPs);
+		do String.dispose(GOTs);
+		return;
+	}
+	
+	/**shows the failure information of a fighting*/
+	function void failMess() {
+		var String CANTs;
+		var String MAYs;
+		let CANTs = "Can't beat it now...";
+		let MAYs = "Maybe later";
+		do Panel.clear();
+		do Output.moveCursor(15, 5);
+		do Output.printString(CANTs);
+		do Output.moveCursor(17, 5);
+		do Output.printString(MAYs);
+		do String.dispose(CANTs);
+		do String.dispose(MAYs);
+		return;
+	}
+	
+	/**shows the words when you meet the princess*/
+	function void princessMess() {
+		var String PRINs;
+		var String KNEWs;
+		var String OUTs;
+		var String PREs;
+		let PRINs = "PRINCESS:";
+		let KNEWs = "I knew you will come!";
+		let OUTs = "Let's get out together";
+		let PREs = "Press any key to end game...";
+		do Panel.clear();
+		do Output.moveCursor(15, 1);
+		do Output.printString(PRINs);
+		do Output.moveCursor(17, 5);
+		do Output.printString(KNEWs);
+		do Output.moveCursor(19, 5);
+		do Output.printString(OUTs);
+		do Output.moveCursor(21, 1);
+		do Output.printString(PREs);
+		do String.dispose(PRINs);
+		do String.dispose(KNEWs);
+		do String.dispose(OUTs);
+		do String.dispose(PREs);
+		return;
+	}
+	
+	/**shows the information when you get to the shop*/
+	function void shopMess() {
+		var String SHOPs;
+		var String BUYs;
+		var String HPs;
+		var String ATKs;
+		var String DEFs;
+		var String LEAVEs;
+		let SHOPs = "********** SHOP **********";
+		let BUYs = "$50 for any of: ";
+		let HPs = "'1' = HP + 100";
+		let ATKs = "'2' = Attack + 2";
+		let DEFs = "'3' = Defence + 2";
+		let LEAVEs = "'Q' = leave";
+		do Panel.clear();
+		do Output.moveCursor(14, 1);
+		do Output.printString(SHOPs);
+		do Output.moveCursor(16, 3);
+		do Output.printString(BUYs);
+		do Output.moveCursor(18, 5);
+		do Output.printString(HPs);
+		do Output.moveCursor(19, 5);
+		do Output.printString(ATKs);
+		do Output.moveCursor(20, 5);
+		do Output.printString(DEFs);
+		do Output.moveCursor(21, 5);
+		do Output.printString(LEAVEs);
+		do String.dispose(SHOPs);
+		do String.dispose(BUYs);
+		do String.dispose(HPs);
+		do String.dispose(ATKs);
+		do String.dispose(DEFs);
+		do String.dispose(LEAVEs);
+		return;
+	}
+	
+	/**shows the information when you don't have keys to open the door*/
+	function void keysMess() {
+		var String CANTs;
+		var String KEYs;
+		let CANTs = "Can't open...";
+		let KEYs = "Need more keys";
+		do Panel.clear();
+		do Output.moveCursor(15, 5);
+		do Output.printString(CANTs);
+		do Output.moveCursor(17, 5);
+		do Output.printString(KEYs);
+		do String.dispose(CANTs);
+		do String.dispose(KEYs);
+		return;
+	}
+	
+	/**show the information when you don't have enogh money to buy in the shop*/
+	function void poorMess() {
+		var String INSs;
+		let INSs = "You don't have enough money";
+		do Panel.clear();
+		do Output.moveCursor(15, 3);
+		do Output.printString(INSs);
+		do String.dispose(INSs);
+		return;
+	}
+}

@@ -1,0 +1,15 @@
+function Main.main 1
+call Game.new 0
+pop local 0
+call OE.opening 0
+pop temp 0
+push local 0
+call Game.play 1
+pop temp 0
+push local 0
+call Game.dispose 1
+pop temp 0
+call OE.ending 0
+pop temp 0
+push constant 0
+return

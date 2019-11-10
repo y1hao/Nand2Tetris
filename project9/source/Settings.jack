@@ -1,0 +1,50 @@
+
+/**Settings class restors the monster information for reference*/
+
+class Settings {
+	field int placeholder;
+	static String monsters;  // a string containing monsters' settings
+
+	/**it seems the variables cannot to assigned value outside a function or method, so have to initialize the monsters string in a constructor*/
+	constructor Settings new() {
+		
+		let monsters = "1211231235129?:3:5>1<??2<AI3DDI5NNS:~bXr";
+		
+		/*  this string contains all information about a monster
+		 *  each four chars for a monster, in order
+		 *  for each monster, the four chars represent HP, attack, defence and money respectively
+		 *  for each char, the value represented is the ascii code minus 48
+		 *  thus '1' = 1, '2' = 2, and ':' = 10, and so on, the largest number that can be represented is 79 = 127('~') - 48
+		 *  HP and money are restore as 1/10 of the real value
+		 */
+		 
+		return this;
+	}
+	
+	/**accessors*/
+	function int getMonsHP(char monster) {
+		var int hp;
+		let hp = (monsters.charAt((monster - 97) * 4) - 48) * 10;
+		return hp;
+	}
+	function int getMonsATK(char monster) {
+		var int a;
+		let a = monsters.charAt((monster - 97) * 4 + 1) - 48;
+		return a;
+	}
+	function int getMonsDEF(char monster) {
+		var int d;
+		let d = monsters.charAt((monster - 97) * 4 + 2) - 48;
+		return d;
+	}
+	function int getMonsMoney(char monster) {
+		var int m;
+		let m = (monsters.charAt((monster - 97) * 4 + 3) - 48) * 10;
+		return m;
+	}
+	method void dispose() {
+		do String.dispose(monsters);
+		do Memory.deAlloc(this);
+		return;
+	}
+}

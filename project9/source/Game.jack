@@ -1,0 +1,256 @@
+
+/**class Game: the game logic*/
+
+class Game {
+	field Array towerMap;  // stores the map of the game, being a 7 long array, each pointing to a level
+	field Hero hero;  
+	field Settings s;  // stores the information about monsters
+	
+	/**creates a game, initiallize the settings*/
+	constructor Game new() {
+		var Array mapArray;
+		var int i;	
+		
+		let mapArray = Array.new(7);
+		let mapArray[0] = "0B121C01001c100D000600010001000B0001000C0001000a0001000bBCe6ba1A";
+		let mapArray[1] = "3011CCBB1000000i1011111116100000101111111010h011101010CB2010E011";
+		let mapArray[2] = "000CC000A11ed11A1000g001100BC001100f0001C111111C000ed00031111112";
+		let mapArray[3] = "510CB0120c0ee0b01111c111b000C00ba00B000aA11c11110a0hh0d0310BC01D";
+		let mapArray[4] = "eBB11BBd1000000A10g6AD0110f02D0e1010000110d1111d10000000cCB11113";
+		let mapArray[5] = "0g1f0g1f01010A010A010101010A01010101010A310g1f010600000g211111f1";
+		let mapArray[6] = "0EE4EE0D00EjE00C0006000B0001000i0001000h0001000g0001000f31161111";
+		
+		/*  the string represents a 8*8 map, from the upper left to the lower right
+		 *  0 = wall, 1 = empty, 2 = upstair, 3 = downstair, 4 = princess, 5 = shop, 6 = door
+		 *  A = medicine, B = sword, C = shield, D = key, E = money
+		 *  a = white slime, b = black slime, c = small bat, d = large bat,
+		 *  e = skeleton, f = white mage, g = black mage,
+		 *  h = white guard, i = black guard, j = devil
+		 */
+		
+		let towerMap = Array.new(7);
+		let towerMap[0] = Level.new(mapArray[0],1,7,11);
+		let towerMap[1] = Level.new(mapArray[1],2,8,48);
+		let towerMap[2] = Level.new(mapArray[2],3,57,62);
+		let towerMap[3] = Level.new(mapArray[3],4,57,6);
+		let towerMap[4] = Level.new(mapArray[4],5,62,29);
+		let towerMap[5] = Level.new(mapArray[5],6,41,57);
+		let towerMap[6] = Level.new(mapArray[6],7,57,11);
+		let hero = Hero.new(100, 1, 1, 1, 0, 0);
+		let s = Settings.new();
+		let i = 0;
+		
+		while(i < 7) {
+			do String.dispose(mapArray[i]);
+			let i = i + 1;
+		}
+		do Array.dispose(towerMap);
+		return this;
+	}
+	
+	/**starts the game, controls the game logic*/
+	method void play() {
+		var int levelNum; // the number of the level, 1~7
+		var Level curLevel;  // the current level
+		var int levelJump; // going upstairs or downstairs, +1 or -1
+		var boolean newLevel;  // whether entering into a new level after a move
+		var boolean exitLevel;  // whether exit the current level after a move
+		var char k;  // represent the key being pressed
+		var int loc; // starting location of the hero
+		var int endLoc;  // the location of the hero when entered from an upper level
+		var int dest;  // the destiny location
+		var char destContent; // the content of the next location
+		var Array curMap; // map array of the current map
+		var boolean iswin; // whether a fight is won
+		var boolean up;  // going upstairs or down stairs
+		let levelNum = 0;
+		let newLevel = true;
+		let exitLevel = false;
+		let curLevel = towerMap[0]; // starting the game, curLevel points to the first level
+		let curMap = curLevel.getMap();
+		let loc = curLevel.getLoc();
+		let endLoc = curLevel.getEndLoc();
+		let dest = -1;
+		let levelJump = 0;
+		let up = true;
+		
+		while (newLevel) {  // if newLevel is true then enters a new level, otherwise exit game
+			let exitLevel = false;
+			do curLevel.draw();
+			do hero.setLoc(loc);
+			do hero.draw(); // render the hero, and display information
+			do hero.display();
+			
+			while ( ~exitLevel) {  // if exitLevel is true exit the current level, otherwise in the same level
+				do Sys.wait(30);  // avoid moving too fast
+				let loc = hero.getLoc();
+				let k = Keyboard.keyPressed();
+				while (k = 0) {
+					let k = Keyboard.keyPressed(); // wait for key pressing
+				}
+				// calculate the next location after an arrow has been pressed
+				if (k = 130) {  // left
+					do hero.setPos(3);
+					let dest = loc - ((loc/8) * 8);
+					if (dest > 0) {
+						let dest = loc - 1;
+					}
+					else {
+						let dest = -1;
+					}
+				}
+				if (k = 131) { // up
+					do hero.setPos(2);
+					let dest = loc/8;
+					if (dest > 0) {
+						let dest = loc - 8;
+					}
+					else {
+						let dest = -1;
+					}
+				}
+				if (k = 132) { // right
+					do hero.setPos(4);
+					let dest = loc - ((loc/8) * 8);
+					if (dest < 7) {
+						let dest = loc + 1;
+					}
+					else {
+						let dest = -1;
+					}
+				}
+				if (k = 133) { // down
+					do hero.setPos(1);
+					let dest = loc/8;
+					if (dest < 7) {
+						let dest = loc + 8;
+					}
+					else {
+						let dest = -1;
+					}
+				}
+				if ((k < 130) | (k > 133)) { // invalid input
+					let dest = -1;
+				}
+				let k = 0;
+				
+				if (~(dest = -1)) {  // if the input is valid, get the content of the next location and response
+					let destContent = curMap[dest];
+					if (destContent = 49) { // 1: empty
+						do hero.move(dest);
+					}
+					if (destContent = 50) { // 2: upstairs
+						let exitLevel = true;
+						let levelJump = 1;
+						let up = true;
+					}
+					if (destContent = 51) { // 3: downstairs
+						let exitLevel = true;
+						let levelJump = -1;
+						let up = false;
+					}
+					if (destContent = 52) { // 4: princess
+						do Panel.princessMess();
+						do Sys.wait(1000);
+						let k = 0;
+						while (k = 0) {
+							do Sys.wait(30);
+							let k = Keyboard.keyPressed();
+						}
+						let exitLevel = true;
+						let newLevel = false;
+						let levelJump = 0;
+						let k = 0;
+					}
+					if (destContent = 53) { // 5: shop
+						do Panel.shopMess();
+						let k = 0;
+						while (~((k = 49) | (k = 50) | (k = 51) | (k = 81))) {
+							do Sys.wait(30);
+							let k = Keyboard.keyPressed();
+						}
+						if (k = 49) { // '1'
+							do hero.buyHP();
+						}
+						else {
+							if (k = 50) { // '2'
+								do hero.buyATK();
+							}
+							else {
+								if (k = 51) { // '3'
+									do hero.buyDEF();
+								}
+								else {
+									do Panel.clear();
+								}
+							}
+						}
+						let k = 0;
+					}
+					if (destContent = 54) { // 6: door
+						if (hero.getKeys() > 0) {
+							do hero.useKey();
+							do hero.move(dest);
+							do curLevel.remove(dest);
+						}
+						else {
+							do Panel.keysMess();
+						}
+					}
+					if ((destContent > 57)&(destContent < 97)) { // props
+						do hero.take(destContent);
+						do hero.move(dest);
+						do curLevel.remove(dest);
+						do Panel.propMess(destContent);
+					}
+					if (destContent > 96) { // monsters
+						do Panel.monsMess(destContent, hero.getHP(), hero.getATK(), hero.getDEF());									
+						let k = 0;
+						while (~((k = 49) | (k = 50))) {
+							do Sys.wait(30);
+							let k = Keyboard.keyPressed(); 
+						}
+						if (k = 49) { 
+							let iswin = hero.fight(destContent);
+							if (iswin) {
+								do curLevel.remove(dest);
+								do hero.move(dest);
+								do curLevel.remove(dest);
+								do hero.showWin();
+							}
+						}
+						else {
+							do Panel.clear();
+						}
+						let k = 0;
+					}
+				} 
+			}
+			let levelNum = levelNum + levelJump; // +1 up, -1 down
+			let curLevel = towerMap[levelNum];
+			if (up) {
+				let loc = curLevel.getLoc();
+			}
+			else {
+				let loc = curLevel.getEndLoc();
+			}
+			let curMap = curLevel.getMap();
+		}
+		return;
+	}
+	
+	/**disposes of the game and its fields*/
+	method void dispose() {
+		var int i;
+		let i = 0;
+		while (i < 7) {
+			do Array.dispose(towerMap[i]);
+			let i = i + 1;
+		}
+		do Array.dispose(towerMap);
+		do hero.dispose();
+		do s.dispose();
+		do Memory.deAlloc(this);
+		return;
+	}
+}

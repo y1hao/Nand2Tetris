@@ -1,0 +1,203 @@
+function Level.new 1
+push constant 4
+call Memory.alloc 1
+pop pointer 0
+push constant 0
+pop local 0
+push constant 64
+call Array.new 1
+pop this 0
+label WHILE_EXP0
+push local 0
+push constant 64
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 0
+add
+push argument 0
+push local 0
+call String.charAt 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push argument 1
+pop this 3
+push argument 2
+pop this 1
+push argument 3
+pop this 2
+push pointer 0
+return
+function Level.getMap 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Level.getLoc 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Level.getEndLoc 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function Level.getNum 0
+push argument 0
+pop pointer 0
+push this 3
+return
+function Level.remove 0
+push argument 0
+pop pointer 0
+push argument 1
+push this 0
+add
+push constant 49
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 0
+return
+function Level.draw 1
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+push constant 16
+push constant 16
+push constant 16
+call Draw.clear 3
+pop temp 0
+label WHILE_EXP0
+push local 0
+push constant 64
+lt
+not
+if-goto WHILE_END0
+push local 0
+push local 0
+push this 0
+add
+pop pointer 1
+push that 0
+call Draw.drawBlock 2
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push pointer 0
+call Level.show 1
+pop temp 0
+push constant 0
+return
+function Level.show 2
+push argument 0
+pop pointer 0
+push constant 15
+call String.new 1
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+push constant 70
+call String.appendChar 2
+push constant 76
+call String.appendChar 2
+push constant 79
+call String.appendChar 2
+push constant 79
+call String.appendChar 2
+push constant 82
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+pop local 0
+push constant 10
+call String.new 1
+push constant 32
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+push constant 42
+call String.appendChar 2
+pop local 1
+push constant 0
+push constant 1
+push constant 16
+call Draw.clear 3
+pop temp 0
+push constant 0
+push constant 1
+call Output.moveCursor 2
+pop temp 0
+push local 0
+call Output.printString 1
+pop temp 0
+push this 3
+call Output.printInt 1
+pop temp 0
+push local 1
+call Output.printString 1
+pop temp 0
+push local 0
+call String.dispose 1
+pop temp 0
+push local 1
+call String.dispose 1
+pop temp 0
+push constant 0
+return
+function Level.dispose 0
+push argument 0
+pop pointer 0
+push this 0
+call Array.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return

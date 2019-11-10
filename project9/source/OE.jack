@@ -1,0 +1,274 @@
+
+/**displays the opening and ending animation*/
+
+class OE {
+	field int placeholder; // stop VM emulator from reporting errors
+	
+	/**opening*/
+	function void opening() {
+		var char enter;
+		var int i;
+		var String start;
+		var String s1;  // should not use 'do Output.printString("......")', the string is never disposed of
+		var String s2;  // must assign each printed string a name, and disposed of it later
+		var String s3;  // otherwise will incur a memory leak, and the a heap overflow error may occur
+		var String s4;
+		var String s5;
+		var String s6;
+		var String s7;
+		let start = "Press any key to start...";
+		let s1 = "The princess was taken away by a devil";
+		let s2 = "She is prisoned on the top of the 7-FLOOR MAGIC TOWER";
+		let s3 = "Young man, start off now and get her back";
+		let s4 = "Defeat all the enemies";
+		let s5 = "And you will get stronger along the way";
+		let s6 = "** Use left, right, up, down arrows to control **";
+		let s7 = "Press any key to continue...";
+		do OE.drawLogo();
+		do Output.moveCursor(21, 19);
+		let i = 0;
+		while (i < start.length()) {
+			do Sys.wait(20);
+			do Output.printChar(start.charAt(i));
+			let i = i + 1;
+		}
+		let enter = Keyboard.keyPressed();
+		while (enter = 0) {
+			let enter = Keyboard.keyPressed();
+		}
+		do Screen.clearScreen();
+		do Sys.wait(1000);
+		do Output.moveCursor(6, (64 - (s1.length())/2));
+		let i = 0;
+		while (i < s1.length()) {
+			do Sys.wait(20);
+			do Output.printChar(s1.charAt(i));
+			let i = i + 1;
+		}
+		do Sys.wait(1000);
+		do Output.moveCursor(8, (64 - (s2.length())/2));
+		let i = 0;
+		while (i < s2.length()) {
+			do Sys.wait(20);
+			do Output.printChar(s2.charAt(i));
+			let i = i + 1;
+		}
+		do Sys.wait(1000);
+		do Output.moveCursor(10, (64 - (s3.length())/2));
+		let i = 0;
+		while (i < s3.length()) {
+			do Sys.wait(20);
+			do Output.printChar(s3.charAt(i));
+			let i = i + 1;
+		}
+		do Sys.wait(1000);
+		do Output.moveCursor(12, (64 - (s4.length())/2));
+		let i = 0;
+		while (i < s4.length()) {
+			do Sys.wait(20);
+			do Output.printChar(s4.charAt(i));
+			let i = i + 1;
+		}
+		do Sys.wait(1000);
+		do Output.moveCursor(14, (64 - (s5.length())/2));
+		let i = 0;
+		while (i < s5.length()) {
+			do Sys.wait(20);
+			do Output.printChar(s5.charAt(i));
+			let i = i + 1;
+		}
+		do Sys.wait(1000);
+		do Output.moveCursor(18, (64 - (s6.length())/2));
+		let i = 0;
+		while (i < s6.length()) {
+			do Sys.wait(5);
+			do Output.printChar(s6.charAt(i));
+			let i = i + 1;
+		}
+		do Output.moveCursor(20, (64 - (s7.length())/2));
+		let i = 0;
+		while (i < s7.length()) {
+			do Sys.wait(5);
+			do Output.printChar(s7.charAt(i));
+			let i = i + 1;
+		}
+		let enter = 0;
+		while (enter = 0) {
+			let enter = Keyboard.keyPressed();
+		}
+		do Screen.clearScreen();
+		do String.dispose(start);
+		do String.dispose(s1);
+		do String.dispose(s2);
+		do String.dispose(s3);
+		do String.dispose(s4);
+		do String.dispose(s5);
+		do String.dispose(s6);
+		do String.dispose(s7);
+		return;
+	}
+	
+	/**ending*/
+	function void ending() {
+		var char exit;
+		var String end;
+		var String sig;
+		var String live;
+		var int i;
+		let end = "Thank you for playing!";
+		let sig = "@Wang Yihao 1/5/2019";
+		let live = "And you lived happily together ever after...";
+		do Screen.clearScreen();
+		do Output.moveCursor(11,10);
+		let i = 0;
+		while (i < live.length()) {
+			do Sys.wait(20);
+			do Output.printChar(live.charAt(i));
+			let i = i + 1;
+		}
+		do Sys.wait(2000);
+		do Screen.clearScreen();
+		do Sys.wait(200);
+		do OE.drawLogo();
+		do Output.moveCursor(19, 21);
+		let i = 0;
+		while (i < end.length()) {
+			do Sys.wait(20);
+			do Output.printChar(end.charAt(i));
+			let i = i + 1;
+		}
+		do Output.moveCursor(21, 22);
+		let i  = 0;
+		while (i < sig.length()) {
+			do Sys.wait(20);
+			do Output.printChar(sig.charAt(i));
+			let i = i + 1;
+		}
+		while (exit = 0) {
+			let exit = Keyboard.keyPressed();
+		}
+		do String.dispose(end);
+		do String.dispose(sig);
+		do String.dispose(live);
+		return;
+	}
+	
+	/**draws the MAGIC TOWER logo*/
+	function void drawLogo() {
+		var int i;
+		var String gameName;
+		let gameName = "MAGIC  TOWER";
+		do Screen.clearScreen();
+		do Output.moveCursor(11, 26);
+		let i = 0;
+		while (i < gameName.length()) {
+			do Sys.wait(50);
+			do Output.printChar(gameName.charAt(i));
+			let i = i + 1;
+		}
+		let i = 0;
+		while (i < 4) {
+			do Sys.wait(50);
+			do OE.drawBackground(36 + (i * 16));
+			let i = i + 1;
+		}
+		let i = 0;
+		while (i < 7) {
+			do Sys.wait(50);
+			do OE.drawBackground(85 + i);
+			let i = i + 1;
+		}
+		let i = 0;
+		while (i < 3) {
+			do Sys.wait(50);
+			do OE.drawBackground(75 - (i * 16));
+			let i = i + 1;
+		}
+		let i = 0;
+		while (i < 6) {
+			do Sys.wait(50);
+			do OE.drawBackground(42 - i);
+			let i = i + 1;
+		}
+		do String.dispose(gameName);
+		return;
+	}
+	
+	/**draws the surrounding walls*/
+	function void drawBackground(int i) {
+		var int memAddress;
+		var int r;
+		var int c;
+		let r = i / 16;
+		let c = i - ((i / 16) * 16);
+		let memAddress = 16384 + (r * 32 * 32 + (c * 2));
+		do Memory.poke(memAddress+0, -1);
+		do Memory.poke(memAddress+32, 384);
+		do Memory.poke(memAddress+64, 384);
+		do Memory.poke(memAddress+96, 384);
+		do Memory.poke(memAddress+128, 384);
+		do Memory.poke(memAddress+160, 384);
+		do Memory.poke(memAddress+192, 384);
+		do Memory.poke(memAddress+224, -1);
+		do Memory.poke(memAddress+256, -1);
+		do Memory.poke(memAddress+288, -32767);
+		do Memory.poke(memAddress+320, -32767);
+		do Memory.poke(memAddress+352, -32767);
+		do Memory.poke(memAddress+384, -32767);
+		do Memory.poke(memAddress+416, -32767);
+		do Memory.poke(memAddress+448, -32767);
+		do Memory.poke(memAddress+480, -1);
+		let memAddress = memAddress + 1;
+		do Memory.poke(memAddress+0, -1);
+		do Memory.poke(memAddress+32, 384);
+		do Memory.poke(memAddress+64, 384);
+		do Memory.poke(memAddress+96, 384);
+		do Memory.poke(memAddress+128, 384);
+		do Memory.poke(memAddress+160, 384);
+		do Memory.poke(memAddress+192, 384);
+		do Memory.poke(memAddress+224, -1);
+		do Memory.poke(memAddress+256, -1);
+		do Memory.poke(memAddress+288, -32767);
+		do Memory.poke(memAddress+320, -32767);
+		do Memory.poke(memAddress+352, -32767);
+		do Memory.poke(memAddress+384, -32767);
+		do Memory.poke(memAddress+416, -32767);
+		do Memory.poke(memAddress+448, -32767);
+		do Memory.poke(memAddress+480, -1);
+		let memAddress = memAddress + 511;
+		do Memory.poke(memAddress+0, -1);
+		do Memory.poke(memAddress+32, 384);
+		do Memory.poke(memAddress+64, 384);
+		do Memory.poke(memAddress+96, 384);
+		do Memory.poke(memAddress+128, 384);
+		do Memory.poke(memAddress+160, 384);
+		do Memory.poke(memAddress+192, 384);
+		do Memory.poke(memAddress+224, -1);
+		do Memory.poke(memAddress+256, -1);
+		do Memory.poke(memAddress+288, -32767);
+		do Memory.poke(memAddress+320, -32767);
+		do Memory.poke(memAddress+352, -32767);
+		do Memory.poke(memAddress+384, -32767);
+		do Memory.poke(memAddress+416, -32767);
+		do Memory.poke(memAddress+448, -32767);
+		do Memory.poke(memAddress+480, -1);
+		let memAddress = memAddress + 1;
+		do Memory.poke(memAddress+0, -1);
+		do Memory.poke(memAddress+32, 384);
+		do Memory.poke(memAddress+64, 384);
+		do Memory.poke(memAddress+96, 384);
+		do Memory.poke(memAddress+128, 384);
+		do Memory.poke(memAddress+160, 384);
+		do Memory.poke(memAddress+192, 384);
+		do Memory.poke(memAddress+224, -1);
+		do Memory.poke(memAddress+256, -1);
+		do Memory.poke(memAddress+288, -32767);
+		do Memory.poke(memAddress+320, -32767);
+		do Memory.poke(memAddress+352, -32767);
+		do Memory.poke(memAddress+384, -32767);
+		do Memory.poke(memAddress+416, -32767);
+		do Memory.poke(memAddress+448, -32767);
+		do Memory.poke(memAddress+480, -1);
+		return;
+	}
+}

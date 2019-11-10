@@ -1,0 +1,233 @@
+
+/**represents the hero*/
+
+class Hero {
+	field int HP;
+	field int ATK;
+	field int DEF;
+	field int keys;
+	field int money;
+	field int location; // current location on the map, 0~63
+	field int position; // the position to render, 1 = face, 2 = back, 3 = left face, 4 = right face
+	field int price;  // money lost each time in the shop
+	field int lastLoc;  // last location
+	field int loss;  // potential HP loss from a fight
+	field int gain;  // money gained from a fight
+	
+	/**creates a hero with the initial HP, attack, defence, keys, money and location*/
+	constructor Hero new(int h, int a, int d, int k, int m, int l) {
+		let HP = h;
+		let ATK = a;
+		let DEF = d;
+		let keys = k;
+		let money = m;
+		let location  = l;
+		let price = 50;
+		let lastLoc = location;
+		let position = 1;
+		return this;
+	}
+	
+	/**accessors*/
+	method void setLoc(int loc) {
+		let lastLoc = location;
+		let location = loc;
+		return;
+	}
+	method void setPos(int pos) {
+		let position = pos;
+		return;
+	}
+	method int getHP() {
+		return HP;
+	}
+	method int getATK() {
+		return ATK;
+	}
+	method int getDEF() {
+		return DEF;
+	}
+	method int getKeys() {
+		return keys;
+	}
+	method int getMoney() {
+		return money;
+	}
+	method int getLoc() {
+		return location;
+	}
+	
+	/**moves the hero to a new location*/
+	method void move(int loc) {
+		let lastLoc = location;
+		let location = loc;
+		do clearDraw();
+		do draw();
+		do Panel.clear();
+		return;
+	}
+	
+	/**buyHP in the shop, refresh displayed information*/
+	method void buyHP() {
+		if (~(money < price)) {
+			let money = money - price;
+			let HP = HP + 200;
+			do display();
+			do Panel.clear();
+		}
+		else {
+			do Panel.poorMess();
+		}
+		return;
+	}
+	
+	/**buy attack in the shop, refresh displayed information*/
+	method void buyATK() {
+		if (~(money < price)) {
+			let money = money - price;
+			let ATK = ATK + 2;
+			do display();
+			do Panel.clear();
+		}
+		else {
+			do Panel.poorMess();
+		}
+		return;
+	}
+	
+	/**buy defence in the shop, refresh displayed information*/
+	method void buyDEF() {
+		if (~(money < price)) {
+			let money = money - price;
+			let DEF = DEF + 2;
+			do display();
+			do Panel.clear();
+		}
+		else {
+			do Panel.poorMess();
+		}
+		return;
+	}
+	
+	/**use key, refresh displayed information*/
+	method void useKey() {
+		let keys = keys - 1;
+		do display();
+		return;
+	}
+	
+	/**pick up props*/
+	method void take(int num) {
+		if (num = 65) {
+			let HP = HP + 50;
+		}
+		if (num = 66) {
+			let ATK = ATK + 1;
+		}
+		if (num = 67) {
+			let DEF = DEF + 1;
+		}
+		if (num = 68) {
+			let keys = keys + 1;
+		}
+		if (num = 69) {
+			let money = money + 300;
+		}
+		do display();
+		return;
+	}
+	
+	/**do fighting with mosters, receives the monster code and returns the fighting outcome*/
+	method boolean fight(char monster) {
+		var boolean iswin;
+		let gain = Settings.getMonsMoney(monster);
+		let iswin = false;
+		if (ATK > Settings.getMonsDEF(monster)) {
+			if (~(DEF < Settings.getMonsATK(monster))) {
+				let iswin = true;
+				let loss = 0;
+			}
+			else {
+				let loss = (Settings.getMonsHP(monster) / (ATK - Settings.getMonsDEF(monster))) * (Settings.getMonsATK(monster) - DEF);
+				if (loss < HP) {
+					let iswin = true;
+				}
+			}
+		}
+		if (~iswin) {
+			do Panel.failMess();
+		}
+		else {
+			let HP = HP - loss;
+			let money = money + gain;
+		}
+		do display();
+		return iswin;
+	}
+	
+	/**shows the winning information*/
+	method void showWin() {
+		do Panel.vicMess(gain, loss);
+		return;
+	}
+	
+	/**display the hero's information*/
+	method void display() {
+		var String HPs;
+		var String ATKs;
+		var String DEFs;
+		var String KEYSs;
+		var String MONEYs;
+		let HPs = "HP: ";
+		let ATKs = "Attack: ";
+		let DEFs = "Defence: ";
+		let KEYSs = "Keys: ";
+		let MONEYs = "Money: $";
+		do Draw.clear(32, 7, 16); // clear display
+		do Output.moveCursor(2, 8);
+		do Output.printString(HPs);
+		do Output.printInt(HP);
+		do Output.moveCursor(4, 8);
+		do Output.printString(ATKs);
+		do Output.printInt(ATK);
+		do Output.moveCursor(6, 8);
+		do Output.printString(DEFs);
+		do Output.printInt(DEF);
+		do Output.moveCursor(8, 8);
+		do Output.printString(KEYSs);
+		do Output.printInt(keys);
+		do Output.moveCursor(10, 8);
+		do Output.printString(MONEYs);
+		do Output.printInt(money);
+		do String.dispose(HPs);
+		do String.dispose(ATKs);
+		do String.dispose(DEFs);
+		do String.dispose(KEYSs);
+		do String.dispose(MONEYs);
+		return;
+	}
+	
+	/**clears the drawn hero on the last location*/
+	method void clearDraw() {
+		var int r;
+		var int c;
+		let r = lastLoc/8;
+		let c = lastLoc - ((lastLoc/8) * 8);
+		let r = r * 2;
+		let c = c * 2 + 16;
+		do Draw.clear(r * 32 + c, 2, 2);
+		return;
+	}
+	
+	/**draws the hero on the new location*/
+	method void draw() {
+		do Draw.drawHero(location, position);
+		return;
+	}
+	
+	/**disposes of the hero*/
+	method void dispose() {
+		do Memory.deAlloc(this);
+		return;
+	}
+}

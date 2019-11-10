@@ -1,0 +1,162 @@
+function Settings.new 0
+push constant 1
+call Memory.alloc 1
+pop pointer 0
+push constant 40
+call String.new 1
+push constant 49
+call String.appendChar 2
+push constant 50
+call String.appendChar 2
+push constant 49
+call String.appendChar 2
+push constant 49
+call String.appendChar 2
+push constant 50
+call String.appendChar 2
+push constant 51
+call String.appendChar 2
+push constant 49
+call String.appendChar 2
+push constant 50
+call String.appendChar 2
+push constant 51
+call String.appendChar 2
+push constant 53
+call String.appendChar 2
+push constant 49
+call String.appendChar 2
+push constant 50
+call String.appendChar 2
+push constant 57
+call String.appendChar 2
+push constant 63
+call String.appendChar 2
+push constant 58
+call String.appendChar 2
+push constant 51
+call String.appendChar 2
+push constant 58
+call String.appendChar 2
+push constant 53
+call String.appendChar 2
+push constant 62
+call String.appendChar 2
+push constant 49
+call String.appendChar 2
+push constant 60
+call String.appendChar 2
+push constant 63
+call String.appendChar 2
+push constant 63
+call String.appendChar 2
+push constant 50
+call String.appendChar 2
+push constant 60
+call String.appendChar 2
+push constant 65
+call String.appendChar 2
+push constant 73
+call String.appendChar 2
+push constant 51
+call String.appendChar 2
+push constant 68
+call String.appendChar 2
+push constant 68
+call String.appendChar 2
+push constant 73
+call String.appendChar 2
+push constant 53
+call String.appendChar 2
+push constant 78
+call String.appendChar 2
+push constant 78
+call String.appendChar 2
+push constant 83
+call String.appendChar 2
+push constant 58
+call String.appendChar 2
+push constant 126
+call String.appendChar 2
+push constant 98
+call String.appendChar 2
+push constant 88
+call String.appendChar 2
+push constant 114
+call String.appendChar 2
+pop static 0
+push pointer 0
+return
+function Settings.getMonsHP 1
+push static 0
+push argument 0
+push constant 97
+sub
+push constant 4
+call Math.multiply 2
+call String.charAt 2
+push constant 48
+sub
+push constant 10
+call Math.multiply 2
+pop local 0
+push local 0
+return
+function Settings.getMonsATK 1
+push static 0
+push argument 0
+push constant 97
+sub
+push constant 4
+call Math.multiply 2
+push constant 1
+add
+call String.charAt 2
+push constant 48
+sub
+pop local 0
+push local 0
+return
+function Settings.getMonsDEF 1
+push static 0
+push argument 0
+push constant 97
+sub
+push constant 4
+call Math.multiply 2
+push constant 2
+add
+call String.charAt 2
+push constant 48
+sub
+pop local 0
+push local 0
+return
+function Settings.getMonsMoney 1
+push static 0
+push argument 0
+push constant 97
+sub
+push constant 4
+call Math.multiply 2
+push constant 3
+add
+call String.charAt 2
+push constant 48
+sub
+push constant 10
+call Math.multiply 2
+pop local 0
+push local 0
+return
+function Settings.dispose 0
+push argument 0
+pop pointer 0
+push static 0
+call String.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
